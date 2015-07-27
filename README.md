@@ -4,6 +4,10 @@ this gives flask applications a setting similar to djangos `INSTALLED_APPS`,
 called `INSTALLED_BLUEPRINTS`
 
 - to use:
+    - first install:
+        
+        - pip install flask-apps
+
     - in your settings file add:
         ```
         INSTALLED_BLUEPRINTS = [
