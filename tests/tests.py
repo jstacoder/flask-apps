@@ -19,7 +19,19 @@ class FlaskAppsTest(TestCase):
         self.client = test_app.test_client()
         return test_app
 
-    def test_one(self):
+    def test_admin_bp(self):
         res = self.client.get('/admin/')
         self.assertIn('admin',res.get_data().lower())
+
+    def test_comment_bp(self):
+        res = self.client.get('/comments/')
+        self.assertIn('comment',res.get_data().lower())
+
+    def test_users_bp(self):
+        res = self.client.get('/users/')
+        self.assertIn('user',res.get_data().lower())
+
+    def test_have_all_bps(self):
+        self.assertEquals(len(self.app.blueprints),3)
+
 
