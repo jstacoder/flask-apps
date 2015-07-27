@@ -1,8 +1,9 @@
 ##flask-apps
 
-gives flask applications a setting similar to djangos `INSTALLED_APPS`, `INSTALLED_BLUEPRINTS`
+this gives flask applications a setting similar to djangos `INSTALLED_APPS`,
+called `INSTALLED_BLUEPRINTS`
 
-to use:
+- to use:
     - in your settings file add:
 ```
 INSTALLED_BLUEPRINTS = [
