@@ -17,4 +17,4 @@ install:
 
 # tests
 script: 
-    - "nosetests flask_apps/tests"
+    - "nosetests tests"
