@@ -25,11 +25,13 @@ called `INSTALLED_BLUEPRINTS`
         flask_apps = FlaskApps(app)
     
         ```
+
     - or use the factory pattern
         ```
         flask_apps = FlaskApps()
         ```
-   - the n later
+
+    - then later
         ```
         flask_apps.init_app(app)
         ```
