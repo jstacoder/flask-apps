@@ -29,7 +29,7 @@ called `INSTALLED_BLUEPRINTS`
         ```
         flask_apps = FlaskApps()
         ```
-        then later
+   - the n later
         ```
         flask_apps.init_app(app)
         ```
