@@ -25,5 +25,13 @@ called `INSTALLED_BLUEPRINTS`
         flask_apps = FlaskApps(app)
     
         ```
+    - or use the factory pattern
+        ```
+        flask_apps = FlaskApps()
+        ```
+        then later
+        ```
+        flask_apps.init_app(app)
+        ```
 
 And thats it, from there FlaskApps will import and register all of the blueprints from the `INSTALLED_BLUEPRINTS` setting, as well as any modules inside the blueprints, ie: models, views, filters, anything
