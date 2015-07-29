@@ -86,12 +86,12 @@ File Structure:
         app/apps/users/models.py
         ```python
             class User(object):
-                _usercount = 0
-                _userlst = []
+                _count = 0
+                _lst = []
                 def __init__(self,name):
-                    self.id = User._usercount = User._usercount  + 1
+                    self.id = User._count = User._count  + 1
                     self.name = name
-                    User._userlst.append(self)
+                    User._lst.append(self)
         ```
         app/apps/users/views.py
         ```python
@@ -119,13 +119,13 @@ File Structure:
         app/apps/comments/models.py
         ```python
             class Comment(object):
-                _commentcount = 0
-                _commentlst = []
+                _count = 0
+                _lst = []
                 def __init__(self,text,user_id):
-                    self.id = Comment._commentcount = Comment._commentcount  + 1
+                    self.id = Comment._count = Comment._count  + 1
                     self.text = text
                     self.user_id = user_id
-                    Comment._commentlst.append(self)
+                    Comment._lst.append(self)
         ```
         app/apps/comments/views.py
         ```python
@@ -153,29 +153,35 @@ File Structure:
             from .views import *
             from .models import *
         ```
-        app/apps/admins/models.py
+        app/apps/admin/models.py
         ```python
-            class User(object):
-                _usercount = 0
-                _userlst = []
-                def __init__(self,name):
-                    self.id = User._usercount = User._usercount  + 1
-                    self.name = name
-                    User._userlst.append(self)
+            class Admin(object):
+                _adminItemcount = 0
+                _Itemlst = []
+                def __init__(self,itmClass):
+                    self.id = Admin._adminItemcount = Admin._adminItemcount + 1
+                    self.name = itmClas.__name__
+                    self._itmLst = itmClass._lst
+                    self._count = itmClass._count
         ```
         app/apps/admin/views.py
         ```python
             from flask import views
-            from . import models,user
+            from ..users import user
+            from ..comments import comment
+            from . import models,admin
             
-            class UserView(views.MethodView):
-                def get(self,id=None):
-                    if id is None:
-                        return models.User._userlst
-                    return filter(lambda x: x.id == id,models.User._userlst)
             
-            user.add_url_rule('/','index',view_func=UserView.as_view('index'))
-            user.add_url_rule('/<id>','user_list',view_func=UserView.as_view('list'))
+            
+            class AdminView(views.MethodView):
+                models = dict(
+                    user=user,
+                    comment=comment
+                )
+            
+                def get(self,admin_name):
+                    return self.models[admin_name]._itmLst
+                    
+            
+            admin.add_url_rule('/<admin_name>','index',view_func=AdminView.as_view('index'))
         ```
-        
-        
