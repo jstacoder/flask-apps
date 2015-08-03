@@ -44,9 +44,9 @@ class FlaskApps(object):
                         app.extensions['apps']['_has_models'] =  True
                     import_string(child)
         '''
-            grab the db engine for use later
+            grab the db engine for use later, if we have the DATABASE_URI set
         '''
-        if app.extensions['apps']['_has_models']:
+        if app.extensions['apps']['_has_models'] and app.config.get('DATABASE_URI'):
             app.extensions['apps']['_db_engine'] = create_engine(app.config['DATABASE_URI'],echo=True)
         else:
             app.extensions['apps']['_db_engine'] = None
