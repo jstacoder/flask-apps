@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/jstacoder/flask-apps.svg?branch=master)](https://travis-ci.org/jstacoder/flask-apps)
 ##flask-apps
 
 this gives flask applications a setting similar to djangos `INSTALLED_APPS`,
