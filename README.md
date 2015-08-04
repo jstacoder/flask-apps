@@ -38,7 +38,7 @@ called `INSTALLED_BLUEPRINTS`
 
 And thats it, from there FlaskApps will import and register all of the blueprints from the `INSTALLED_BLUEPRINTS` setting, as well as any modules inside the blueprints, ie: models, views, filters, anything
 
-Here's 2 small, trivial examples. To give you a better idea. One without flask-apps, and one using flask-apps.
+Here's 2 ~~small~~, trivial examples. To give you a better idea. One without flask-apps, and one using flask-apps.
 Both will use the same file structure, the only differernce will be in the amount of code needed in each file.
 
 File Structure:
@@ -60,7 +60,8 @@ File Structure:
                 - __init__.py
 ```
 - Example1
-    - No flask-apps
+    - No flask-apps  
+    
         `app/__init__.py`
         ```python
             from flask import Flask
