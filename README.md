@@ -55,10 +55,6 @@ File Structure:
                 - models.py
                 - views.py
                 - __init__.py
-            -   admin/
-                - models.py
-                - views.py
-                - __init__.py
 ```
 - Example1
     - No flask-apps  
@@ -206,45 +202,4 @@ File Structure:
             
             comment.add_url_rule('/<user_id>','index_by_user',view_func=CommentView.as_view('cmt_by_user'))
             comment.add_url_rule('/<id>','index_by_id',view_func=CommentView.as_view('cmt_by_idx'))
-        ```
-        `app/apps/admin/__init__.py`
-        ```python
-            from flask import Blueprint
-            
-            admin = Blueprint(__name__,'admin')
-            
-            from .views import *
-            from .models import *
-        ```
-        `app/apps/admin/models.py`
-        ```python
-            class Admin(object):
-                _adminItemcount = 0
-                _Itemlst = []
-                def __init__(self,itmClass):
-                    self.id = Admin._adminItemcount = Admin._adminItemcount + 1
-                    self.name = itmClas.__name__
-                    self._itmLst = itmClass._lst
-                    self._count = itmClass._count
-        ```
-        `app/apps/admin/views.py`
-        ```python
-            from flask import views
-            from ..users import user
-            from ..comments import comment
-            from . import models,admin
-            
-            
-            
-            class AdminView(views.MethodView):
-                models = dict(
-                    user=user,
-                    comment=comment
-                )
-            
-                def get(self,admin_name):
-                    return self.models[admin_name]._itmLst
-                    
-            
-            admin.add_url_rule('/<admin_name>','index',view_func=AdminView.as_view('index'))
         ```
