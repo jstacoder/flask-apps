@@ -59,7 +59,7 @@ File Structure:
                 - __init__.py
 - Example1
     - No flask-apps
-        app/__init__.py
+        `app/__init__.py`
         ```python
             from flask import Flask
             from .apps.users import user
@@ -74,7 +74,7 @@ File Structure:
             if __name__ == "__main__":
                 app.run()
         ```
-        app/apps/users/__init__.py
+        `app/apps/users/__init__.py`
         ```python
             from flask import Blueprint
             
@@ -83,7 +83,7 @@ File Structure:
             from .views import *
             from .models import *
         ```
-        app/apps/users/models.py
+        `app/apps/users/models.py`
         ```python
             class User(object):
                 _count = 0
@@ -93,7 +93,7 @@ File Structure:
                     self.name = name
                     User._lst.append(self)
         ```
-        app/apps/users/views.py
+        `app/apps/users/views.py`
         ```python
             from flask import views
             from . import models,user
@@ -107,7 +107,7 @@ File Structure:
             user.add_url_rule('/','index',view_func=UserView.as_view('index'))
             user.add_url_rule('/<id>','user_list',view_func=UserView.as_view('list'))
         ```
-        app/apps/comments/__init__.py
+        `app/apps/comments/__init__.py`
         ```python
             from flask import Blueprint
             
@@ -116,7 +116,7 @@ File Structure:
             from .views import *
             from .models import *
         ```
-        app/apps/comments/models.py
+        `app/apps/comments/models.py`
         ```python
             class Comment(object):
                 _count = 0
@@ -127,7 +127,7 @@ File Structure:
                     self.user_id = user_id
                     Comment._lst.append(self)
         ```
-        app/apps/comments/views.py
+        `app/apps/comments/views.py`
         ```python
             from flask import views
             from . import models,comment
@@ -144,7 +144,7 @@ File Structure:
             comment.add_url_rule('/<user_id>','index_by_user',view_func=CommentView.as_view('cmt_by_user'))
             comment.add_url_rule('/<id>','index_by_id',view_func=CommentView.as_view('cmt_by_idx'))
         ```
-        app/apps/admin/__init__.py
+        `app/apps/admin/__init__.py`
         ```python
             from flask import Blueprint
             
@@ -153,7 +153,7 @@ File Structure:
             from .views import *
             from .models import *
         ```
-        app/apps/admin/models.py
+        `app/apps/admin/models.py`
         ```python
             class Admin(object):
                 _adminItemcount = 0
@@ -164,7 +164,7 @@ File Structure:
                     self._itmLst = itmClass._lst
                     self._count = itmClass._count
         ```
-        app/apps/admin/views.py
+        `app/apps/admin/views.py`
         ```python
             from flask import views
             from ..users import user
