@@ -42,6 +42,7 @@ Here's 2 small, trivial examples. To give you a better idea. One without flask-a
 Both will use the same file structure, the only differernce will be in the amount of code needed in each file.
 
 File Structure:
+```
     -   app/
         -   __init__.py
         -   apps/
@@ -57,6 +58,7 @@ File Structure:
                 - models.py
                 - views.py
                 - __init__.py
+```
 - Example1
     - No flask-apps
         `app/__init__.py`
