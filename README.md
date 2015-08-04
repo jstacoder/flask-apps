@@ -45,6 +45,7 @@ File Structure:
 ```
     -   app/
         -   __init__.py
+        -   base.py
         -   apps/
             -   users/
                 - models.py
@@ -77,6 +78,67 @@ File Structure:
             if __name__ == "__main__":
                 app.run()
         ```
+        `app/base.py`
+        ```python
+        from sqlalchemy.ext.declarative import declared_attr,declarative_base
+        from inflection import pluralize, underscore
+        import sqlalchemy as sa
+        import os
+        
+        class classproperty(object):
+            def __init__(self,getter):
+                self.getter = getter
+                
+            def __get__(self,instance,owner):
+                return self.getter(owner)
+                
+        class BaseModel(declarative_base()):
+            _session = None
+            _engine = None
+            _query = None
+            
+            def save(self):
+                self.session.add(self)
+                self.session.commit()
+                return self
+            
+            def delete(self):
+                self.session.delete(self)
+                
+            @classmethod
+            def get_all(cls):
+                return cls.query.all()
+                
+            @classmethod
+            def get(cls,id):
+                return cls.query.get(id)
+                
+            @classproperty
+            def query(cls):
+                if cls._query is None:
+                    cls._query = cls.session.query(cls)
+                return cls._query
+                
+            @classproperty
+            def session(cls):
+                if cls._session is None:
+                    cls._session = sa.orm.scoped_session(sa.orm.sessionmaker(bind=cls.engine))
+                return cls._session
+        
+            @classproperty
+            def engine(cls):
+                if cls._engine is None:
+                    cls._engine = sa.create_engine(os.environ.get('DATABASE_URI','sqlite:///test.db'))
+                return cls._engine
+            
+            @declared_attr
+            def id(self):
+                return sa.Column(sa.Integer,primary_key=True)
+                
+            @declared_attr
+            def __tablename__(self):
+                return underscore(pluralize(self.__name__))
+        ```
         `app/apps/users/__init__.py`
         ```python
             from flask import Blueprint
@@ -88,24 +150,23 @@ File Structure:
         ```
         `app/apps/users/models.py`
         ```python
-            class User(object):
-                _count = 0
-                _lst = []
-                def __init__(self,name):
-                    self.id = User._count = User._count  + 1
-                    self.name = name
-                    User._lst.append(self)
+            from ...base import BaseModel,sa
+            
+            
+            class User(BaseModel):
+                name = sa.Column(sa.String(255))
+                
         ```
         `app/apps/users/views.py`
         ```python
-            from flask import views
+            from flask import views,jsonify
             from . import models,user
             
             class UserView(views.MethodView):
                 def get(self,id=None):
                     if id is None:
-                        return models.User._userlst
-                    return filter(lambda x: x.id == id,models.User._userlst)
+                        return jsonify(result=[x.name for x in models.User.get_all()])
+                    return jsonify(result=models.User.get(id).name)
             
             user.add_url_rule('/','index',view_func=UserView.as_view('index'))
             user.add_url_rule('/<id>','user_list',view_func=UserView.as_view('list'))
@@ -121,28 +182,27 @@ File Structure:
         ```
         `app/apps/comments/models.py`
         ```python
-            class Comment(object):
-                _count = 0
-                _lst = []
-                def __init__(self,text,user_id):
-                    self.id = Comment._count = Comment._count  + 1
-                    self.text = text
-                    self.user_id = user_id
-                    Comment._lst.append(self)
+            from ...base import BaseModel,sa
+            
+            class Comment(BaseModel):
+                text = sa.Column(sa.Text)
+                user_id = sa.Column(sa.Integer,sa.ForeignKey('users.id'))
+                user = sa.orm.relation('User',uselist=False)
         ```
         `app/apps/comments/views.py`
         ```python
-            from flask import views
+            from flask import views,jsonify
             from . import models,comment
+            from ..users.models impoer User
             
             class CommentView(views.MethodView):
                 def get(self,id=None,user_id=None):
                     if id is None and user_id is None:
                         return False
                     if user_id:
-                        return filter(lambda x: x.user_id == user_id,Comment._commentlst)
+                        return jsonify(result=[x.text for x in User.get(user_id).comments])
                     else:
-                        return filter(lambda x: x.id == id,Comment._commentlst)
+                        return jsonify(result=[x.text for x in models.Comment.get_all()])
             
             comment.add_url_rule('/<user_id>','index_by_user',view_func=CommentView.as_view('cmt_by_user'))
             comment.add_url_rule('/<id>','index_by_id',view_func=CommentView.as_view('cmt_by_idx'))
