@@ -37,7 +37,7 @@ class FlaskApps(object):
                     if child.endswith('models'):
                         app.extensions['apps']['_has_models'] =  True
                     import_string(child)
-        if app.extensions['apps']['_has_models']:
+        if app.extensions['apps']['_has_models'] and app.config.get('DATABASE_URI'):
             app.extensions['apps']['_db_engine'] = create_engine(app.config['DATABASE_URI'],echo=True)
         else:
             app.extensions['apps']['_db_engine'] = None
