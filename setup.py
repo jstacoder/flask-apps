@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    version='0.0.1',
+    version='0.0.2',
     name='flask-apps',
     packages=['flask_apps'],
     author='kyle roux',

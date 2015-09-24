@@ -3,25 +3,19 @@ from werkzeug import import_string,find_modules
 from sqlalchemy import create_engine
 
 class FlaskApps(object):
-    '''
-        object to perform our needs
-    '''
     def __init__(self,app=None):
-        '''
-            just grab the app and initalize it if its there
-        '''
         self.app = app
         if self.app is not None:
             self.init_app(self.app)
 
     def init_app(self,app):
         '''
-            - load config from FLASK_APPS_CFG env var
-
-            - run through installed_blueprints and import 
-            
+            - load config from FLASK_APPS_CFG env var        
+    
+            - run through installed_blueprints and import
+        
             - import modules within blueprints
-        '''
+        '''        
         blueprints = []
         app.extensions = app.extensions or {}
         app.extensions['apps'] = {}
@@ -43,12 +37,18 @@ class FlaskApps(object):
                     if child.endswith('models'):
                         app.extensions['apps']['_has_models'] =  True
                     import_string(child)
-        '''
-            grab the db engine for use later
-        '''
         if app.extensions['apps']['_has_models']:
             app.extensions['apps']['_db_engine'] = create_engine(app.config['DATABASE_URI'],echo=True)
         else:
             app.extensions['apps']['_db_engine'] = None
         for bp in bps:
-            app.register_blueprint(bp)
+            if not bp.name in app.blueprints:
+                try:
+                    app.register_blueprint(bp)
+                except:
+                    pass
+        
+
+
+
+
