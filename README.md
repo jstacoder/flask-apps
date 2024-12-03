@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/jstacoder/flask-apps.svg?branch=master)](https://travis-ci.org/jstacoder/flask-apps)
-##flask-apps
+## Flask-Apps
 
 this gives flask applications a setting similar to djangos `INSTALLED_APPS`,
 called `INSTALLED_BLUEPRINTS`
